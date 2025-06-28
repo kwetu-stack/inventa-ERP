@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Stock - Inventa</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+    }
+
+    .navbar {
+      background-color: #003366;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      color: white;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin: 8px 12px;
+      font-weight: bold;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .nav-toggle span {
+      background: white;
+      height: 3px;
+      margin: 4px 0;
+      width: 25px;
+    }
+
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      background: #003366;
+      padding: 10px;
+    }
+
+    .nav-mobile a {
+      margin: 10px 0;
+    }
+
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: flex;
+      }
+
+      .nav-mobile.show {
+        display: flex;
+      }
+    }
+
+    h1 {
+      color: #003366;
+      text-align: center;
+      margin: 30px 20px 10px;
+    }
+
+    form {
+      background: #fff;
+      padding: 25px;
+      max-width: 500px;
+      margin: 0 auto 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+    }
+
+    button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 14px;
+      background: #003366;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #002244;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 15px;
+      }
+
+      form {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div><strong>Inventa™</strong></div>
+    <div class="nav-toggle" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="nav-links">
+      <a href="/{{ tenant }}/dashboard">Dashboard</a>
+      <a href="/{{ tenant }}/add-stock">Add Stock</a>
+      <a href="/{{ tenant }}/products">View Products</a>
+      <a href="/{{ tenant }}/record-sale">Record Sale</a>
+      <a href="/{{ tenant }}/sales-history">Sales History</a>
+    </div>
+  </div>
+
+  <div id="mobileNav" class="nav-mobile">
+    <a href="/{{ tenant }}/dashboard">Dashboard</a>
+    <a href="/{{ tenant }}/add-stock">Add Stock</a>
+    <a href="/{{ tenant }}/products">View Products</a>
+    <a href="/{{ tenant }}/record-sale">Record Sale</a>
+    <a href="/{{ tenant }}/sales-history">Sales History</a>
+  </div>
+
+  <h1>Add New Product</h1>
+  <form method="post">
+    <label for="name">Product Name</label>
+    <input type="text" name="name" id="name" required>
+
+    <label for="quantity">Quantity</label>
+    <input type="number" name="quantity" id="quantity" min="1" required>
+
+    <label for="price">Unit Price (KES)</label>
+    <input type="number" name="price" id="price" min="0" step="0.01" required>
+
+    <button type="submit">Save Product</button>
+  </form>
+
+  <script>
+    function toggleNav() {
+      document.getElementById('mobileNav').classList.toggle('show');
+    }
+  </script>
+</body>
+</html>
