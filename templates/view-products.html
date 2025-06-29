@@ -3,25 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>View Products - Inventa™</title>
+  <title>View Products – Inventa™</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      background-color: #003366;
+      padding: 10px 20px;
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .navbar-logo img {
+      height: 30px;
+    }
+
+    .navbar-menu {
+      display: flex;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .navbar-menu li {
+      margin-left: 20px;
+    }
+
+    .navbar-menu li a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .navbar-toggle {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .navbar-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #003366;
+      }
+
+      .navbar-menu li {
+        margin: 10px 0;
+        text-align: center;
+      }
+
+      .navbar-toggle {
+        display: block;
+      }
+    }
+
     .container {
-      max-width: 900px;
-      margin: auto;
+      max-width: 1000px;
+      margin: 40px auto;
       padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
     h2 {
-      color: #003366;
       text-align: center;
+      color: #003366;
       margin-bottom: 20px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 15px;
+      font-size: 15px;
     }
 
     th, td {
@@ -35,88 +102,78 @@
       color: white;
     }
 
-    .note {
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    footer {
       text-align: center;
+      padding: 15px 10px;
+      background: #f1f1f1;
       font-size: 14px;
-      margin-top: 20px;
       color: #555;
-    }
-
-    .demo-lock {
-      background-color: #fff3cd;
-      border: 1px solid #ffeeba;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      color: #856404;
-      text-align: center;
-      font-size: 15px;
-    }
-
-    @media (max-width: 600px) {
-      table, thead, tbody, th, td, tr {
-        display: block;
-      }
-
-      thead tr {
-        display: none;
-      }
-
-      tr {
-        margin-bottom: 15px;
-      }
-
-      td {
-        padding-left: 50%;
-        position: relative;
-      }
-
-      td::before {
-        position: absolute;
-        left: 10px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
-        font-weight: bold;
-      }
-
-      td:nth-of-type(1)::before { content: "Product Name"; }
-      td:nth-of-type(2)::before { content: "Quantity"; }
-      td:nth-of-type(3)::before { content: "Price"; }
     }
   </style>
 </head>
 <body>
-  {% include 'navbar.html' %}
-  <div class="container">
-    <h2>View Products</h2>
-
-    <div class="demo-lock">
-      Demo Mode: Data editing is disabled.<br>
-      📞 +254 740 33 72 72 / +254 718 52 44 70<br>
-      ✉️ kwetudist@gmail.com
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-logo">
+        <img src="{{ url_for('static', filename='inventa-logo.png') }}" alt="Inventa Logo">
+      </div>
+      <div class="navbar-toggle" id="mobile-menu">&#9776;</div>
+      <ul class="navbar-menu" id="navbar-links">
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('add_stock') }}">Add Stock</a></li>
+        <li><a href="{{ url_for('view_products') }}">View Products</a></li>
+        <li><a href="{{ url_for('record_sale') }}">Record Sale</a></li>
+        <li><a href="{{ url_for('sales_history') }}">Sales History</a></li>
+      </ul>
     </div>
+  </nav>
 
+  <div class="container">
+    <h2>Product List</h2>
+    {% if products %}
     <table>
       <thead>
         <tr>
           <th>Product Name</th>
+          <th>Category</th>
           <th>Quantity</th>
-          <th>Price (KES)</th>
+          <th>Unit Price (KES)</th>
         </tr>
       </thead>
       <tbody>
         {% for product in products %}
         <tr>
-          <td>{{ product.name }}</td>
-          <td>{{ product.quantity }}</td>
-          <td>{{ product.price }}</td>
+          <td>{{ product['name'] }}</td>
+          <td>{{ product['category'] }}</td>
+          <td>{{ product['quantity'] }}</td>
+          <td>{{ "%.2f"|format(product['price']) }}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
-
-    <p class="note">This is a demo view. Product data is static and cannot be edited.</p>
+    {% else %}
+      <p style="text-align: center; color: #888;">No products found.</p>
+    {% endif %}
   </div>
+
+  <footer>
+    Powered by <strong>Kwetu Partners Ltd</strong> &middot;
+    📞 +254 740 33 72 72 / +254 718 52 44 70 &middot;
+    ✉️ kwetudist@gmail.com
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggle = document.getElementById('mobile-menu');
+      const menu = document.getElementById('navbar-links');
+      toggle.addEventListener('click', function () {
+        menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+      });
+    });
+  </script>
 </body>
 </html>

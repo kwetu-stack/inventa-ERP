@@ -2,110 +2,133 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inventa™ Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard – Inventa™</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+      background: #f4f7fa;
     }
 
-    header {
-      background: #003366;
-      color: white;
-      padding: 1rem;
+    .navbar {
+      background-color: #003366;
+      padding: 10px 20px;
+    }
+
+    .navbar-container {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
     }
 
-    .logo {
-      font-size: 1.2rem;
+    .navbar-logo img {
+      height: 30px;
+    }
+
+    .navbar-menu {
+      display: flex;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .navbar-menu li {
+      margin-left: 20px;
+    }
+
+    .navbar-menu li a {
+      color: #fff;
+      text-decoration: none;
       font-weight: bold;
     }
 
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    nav a {
+    .navbar-toggle {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
       color: white;
-      text-decoration: none;
-      font-size: 0.95rem;
     }
 
-    .container {
-      max-width: 960px;
-      margin: 2rem auto;
-      padding: 1rem;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    @media (max-width: 768px) {
+      .navbar-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: #003366;
+      }
+
+      .navbar-menu li {
+        margin: 10px 0;
+        text-align: center;
+      }
+
+      .navbar-toggle {
+        display: block;
+      }
     }
 
-    h1 {
+    .dashboard {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .dashboard h1 {
       color: #003366;
-    }
-
-    .card {
-      padding: 1rem;
-      background: #f0f0f0;
-      border-radius: 6px;
-      margin: 1rem 0;
+      margin-bottom: 20px;
     }
 
     footer {
       text-align: center;
-      padding: 1rem;
-      background: #eee;
-      font-size: 0.9rem;
-      color: #666;
-      margin-top: 2rem;
-    }
-
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      nav {
-        flex-direction: column;
-        width: 100%;
-      }
+      padding: 15px 10px;
+      background: #f1f1f1;
+      font-size: 14px;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">Inventa™</div>
-    <nav>
-      <a href="/inventa/dashboard">Dashboard</a>
-      <a href="/inventa/products">View Products</a>
-      <a href="/inventa/add-stock">Add Stock</a>
-      <a href="/inventa/record-sale">Record Sale</a>
-      <a href="/inventa/sales-history">Sales History</a>
-    </nav>
-  </header>
-
-  <div class="container">
-    <h1>Dashboard Overview</h1>
-
-    <div class="card">
-      <strong>Total Products:</strong> {{ total_products }}
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-logo">
+        <img src="{{ url_for('static', filename='inventa-logo.png') }}" alt="Inventa Logo">
+      </div>
+      <div class="navbar-toggle" id="mobile-menu">&#9776;</div>
+      <ul class="navbar-menu" id="navbar-links">
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('add_stock') }}">Add Stock</a></li>
+        <li><a href="{{ url_for('view_products') }}">View Products</a></li>
+        <li><a href="{{ url_for('record_sale') }}">Record Sale</a></li>
+        <li><a href="{{ url_for('sales_history') }}">Sales History</a></li>
+      </ul>
     </div>
-    <div class="card">
-      <strong>Total Sales (Ksh):</strong> {{ '%.2f' | format(total_sales) }}
-    </div>
+  </nav>
+
+  <div class="dashboard">
+    <h1>Welcome to Inventa™ Dashboard</h1>
+    <p>This is the demo version. Some actions are locked.</p>
   </div>
 
   <footer>
-    Powered by Kwetu Partners Ltd &middot; Demo Mode
+    Powered by <strong>Kwetu Partners Ltd</strong> &middot;
+    📞 +254 740 33 72 72 / +254 718 52 44 70 &middot;
+    ✉️ kwetudist@gmail.com
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggle = document.getElementById('mobile-menu');
+      const menu = document.getElementById('navbar-links');
+      toggle.addEventListener('click', function () {
+        if (menu.style.display === 'flex') {
+          menu.style.display = 'none';
+        } else {
+          menu.style.display = 'flex';
+        }
+      });
+    });
+  </script>
 </body>
 </html>

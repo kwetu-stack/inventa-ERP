@@ -1,12 +1,9 @@
 services:
   - type: web
-    name: inventa-erp-demo
+    name: inventa-ERP
     env: python
-    buildCommand: ""
-    startCommand: gunicorn app:app
-    plan: free
-    branch: main
-    region: oregon
-    runtime: python
-    repo: https://github.com/kwetu-stack/inventa-ERP
-    autoDeploy: true
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10

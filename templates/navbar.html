@@ -5,11 +5,11 @@
     </div>
     <div class="navbar-toggle" id="mobile-menu">&#9776;</div>
     <ul class="navbar-menu" id="navbar-links">
-      <li><a href="{{ url_for('dashboard', tenant=tenant) }}">Dashboard</a></li>
-      <li><a href="{{ url_for('add_stock', tenant=tenant) }}">Add Stock</a></li>
-      <li><a href="{{ url_for('view_products', tenant=tenant) }}">View Products</a></li>
-      <li><a href="{{ url_for('record_sale', tenant=tenant) }}">Record Sale</a></li>
-      <li><a href="{{ url_for('sales_history', tenant=tenant) }}">Sales History</a></li>
+      <li><a href="/inventa/dashboard">Dashboard</a></li>
+      <li><a href="/inventa/add-stock">Add Stock</a></li>
+      <li><a href="/inventa/view-products">View Products</a></li>
+      <li><a href="/inventa/record-sale">Record Sale</a></li>
+      <li><a href="/inventa/sales-history">Sales History</a></li>
     </ul>
   </div>
 </nav>
@@ -69,11 +69,7 @@
     const toggle = document.getElementById('mobile-menu');
     const menu = document.getElementById('navbar-links');
     toggle.addEventListener('click', function() {
-      if (menu.style.display === 'flex') {
-        menu.style.display = 'none';
-      } else {
-        menu.style.display = 'flex';
-      }
+      menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
     });
   });
 </script>
