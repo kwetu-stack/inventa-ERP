@@ -58,13 +58,14 @@ def download_invoice(sale_id):
     conn.close()
 
     total_in_words = num2words(sale["grand_total"], to="currency", lang="en")
-
     rendered = render_template("invoice.html", sale=sale, items=items, total_in_words=total_in_words)
     pdf = pdfkit.from_string(rendered, False)
+    
     with open("invoice.pdf", "wb") as f:
         f.write(pdf)
+
     return send_file("invoice.pdf", as_attachment=True)
 
-# --- MAIN ---
+# --- ENTRY POINT ---
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
