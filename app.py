@@ -45,10 +45,7 @@ def record_sale():
 
 @app.route("/inventa/sales-history")
 def sales_history():
-    conn = get_db_connection()
-    sales = conn.execute("SELECT * FROM sales ORDER BY date DESC").fetchall()
-    conn.close()
-    return render_template("sales-history.html", sales=sales)
+    return render_template("sales-history-demo.html")  # Locked for demo
 
 @app.route("/inventa/invoice/<int:sale_id>")
 def download_invoice(sale_id):
@@ -63,9 +60,9 @@ def download_invoice(sale_id):
     
     with open("invoice.pdf", "wb") as f:
         f.write(pdf)
-
+    
     return send_file("invoice.pdf", as_attachment=True)
 
-# --- ENTRY POINT ---
+# --- MAIN ---
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
