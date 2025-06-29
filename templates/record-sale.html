@@ -1,203 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Record Sale - {{ tenant | capitalize }}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Record Sale - Inventa™ (Demo)</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f2f5;
-      margin: 0;
-    }
-
-    .navbar {
-      background-color: #003366;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      color: white;
-    }
-
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      margin: 8px 12px;
-      font-weight: bold;
-    }
-
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-
-    .nav-toggle span {
-      background: white;
-      height: 3px;
-      margin: 4px 0;
-      width: 25px;
-    }
-
-    .nav-mobile {
-      display: none;
-      flex-direction: column;
-      background: #003366;
-      padding: 10px;
-    }
-
-    .nav-mobile a {
-      margin: 10px 0;
-    }
-
-    @media (max-width: 600px) {
-      .nav-links {
-        display: none;
-      }
-
-      .nav-toggle {
-        display: flex;
-      }
-
-      .nav-mobile.show {
-        display: flex;
-      }
-    }
-
-    .container {
-      background-color: white;
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      text-align: center;
-      color: #003366;
+    .demo-lock {
+      background: #fff3cd;
+      color: #856404;
+      padding: 15px;
+      border: 1px solid #ffeeba;
+      border-radius: 6px;
       margin-bottom: 20px;
+      font-size: 15px;
     }
-
-    label {
-      font-weight: bold;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    button {
-      background-color: #003366;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin-right: 10px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .item-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .item-row select,
-    .item-row input {
-      flex: 1;
-    }
-
-    .remove-btn {
-      background-color: red;
-    }
-
-    @media (max-width: 600px) {
-      .item-row {
-        flex-direction: column;
-      }
+    form input, form select, form button {
+      opacity: 0.6;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
+  {% include 'navbar.html' %}
 
-  <div class="navbar">
-    <div><strong>Inventa™</strong></div>
-    <div class="nav-toggle" onclick="toggleNav()">
-      <span></span><span></span><span></span>
+  <main class="container">
+    <h1>Record Sale (Demo)</h1>
+
+    <div class="demo-lock">
+      <strong>Demo Mode:</strong> Data entry is disabled.<br>
+      To get a full working version of Inventa™, contact us at:<br>
+      📞 +254 740 33 72 72 / +254 718 52 44 70<br>
+      ✉️ kwetudist@gmail.com
     </div>
-    <div class="nav-links">
-      <a href="/{{ tenant }}/dashboard">Dashboard</a>
-      <a href="/{{ tenant }}/add-stock">Add Stock</a>
-      <a href="/{{ tenant }}/products">View Products</a>
-      <a href="/{{ tenant }}/record-sale">Record Sale</a>
-      <a href="/{{ tenant }}/sales-history">Sales History</a>
-    </div>
-  </div>
 
-  <div id="mobileNav" class="nav-mobile">
-    <a href="/{{ tenant }}/dashboard">Dashboard</a>
-    <a href="/{{ tenant }}/add-stock">Add Stock</a>
-    <a href="/{{ tenant }}/products">View Products</a>
-    <a href="/{{ tenant }}/record-sale">Record Sale</a>
-    <a href="/{{ tenant }}/sales-history">Sales History</a>
-  </div>
-
-  <div class="container">
-    <h2>Record New Sale</h2>
-    <form method="POST">
-      <label for="customer">Customer Name:</label>
+    <form method="post">
+      <label for="customer">Customer Name</label>
       <input type="text" id="customer" name="customer" required>
 
-      <div id="product-rows">
-        <div class="item-row">
-          <select name="product_id" required>
-            {% for product in products %}
-              <option value="{{ product['id'] }}">{{ product['name'] }} (KES {{ product['price'] }})</option>
-            {% endfor %}
-          </select>
-          <input type="number" name="quantity" min="1" placeholder="Qty" required>
-        </div>
-      </div>
+      <label for="product">Product</label>
+      <select name="product_id" id="product">
+        {% for product in products %}
+          <option value="{{ product.id }}">{{ product.name }} (Stock: {{ product.quantity }})</option>
+        {% endfor %}
+      </select>
 
-      <button type="button" onclick="addProductRow()">+ Add Product</button>
-      <button type="submit">Record Sale</button>
+      <label for="quantity">Quantity</label>
+      <input type="number" id="quantity" name="quantity" required>
+
+      <button type="submit">Submit Sale</button>
     </form>
-  </div>
-
-  <script>
-    function toggleNav() {
-      document.getElementById('mobileNav').classList.toggle('show');
-    }
-
-    function addProductRow() {
-      const row = document.createElement('div');
-      row.className = 'item-row';
-
-      row.innerHTML = `
-        <select name="product_id" required>
-          {% for product in products %}
-            <option value="{{ product['id'] }}">{{ product['name'] }} (KES {{ product['price'] }})</option>
-          {% endfor %}
-        </select>
-        <input type="number" name="quantity" min="1" placeholder="Qty" required>
-        <button type="button" class="remove-btn" onclick="this.parentNode.remove()">Remove</button>
-      `;
-
-      document.getElementById('product-rows').appendChild(row);
-    }
-  </script>
+  </main>
 </body>
 </html>

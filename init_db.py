@@ -3,6 +3,7 @@ import sqlite3
 conn = sqlite3.connect('inventory.db')
 cursor = conn.cursor()
 
+# Products table
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -12,6 +13,7 @@ CREATE TABLE IF NOT EXISTS products (
 )
 ''')
 
+# Sales table
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS sales (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,6 +25,7 @@ CREATE TABLE IF NOT EXISTS sales (
 )
 ''')
 
+# Sale items table
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS sale_items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,13 +38,20 @@ CREATE TABLE IF NOT EXISTS sale_items (
 )
 ''')
 
-conn.commit()
-conn.close()
-print("✅ Database tables created.")
-
+# Tenants table
+cursor.execute('''
 CREATE TABLE IF NOT EXISTS tenants (
     name TEXT PRIMARY KEY,
     is_active INTEGER DEFAULT 1
-);
-INSERT INTO tenants (name, is_active) VALUES ('alamudi', 1);
-INSERT INTO tenants (name, is_active) VALUES ('examplecorp', 0);
+)
+''')
+
+# Insert demo tenants
+cursor.execute("INSERT OR REPLACE INTO tenants (name, is_active) VALUES ('alamudi', 1)")
+cursor.execute("INSERT OR REPLACE INTO tenants (name, is_active) VALUES ('examplecorp', 0)")
+cursor.execute("INSERT OR REPLACE INTO tenants (name, is_active) VALUES ('testclient', 1)")
+
+conn.commit()
+conn.close()
+
+print("✅ All database tables created and demo tenants added.")

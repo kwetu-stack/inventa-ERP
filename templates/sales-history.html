@@ -1,189 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sales History - {{ tenant | capitalize }} | Inventa™</title>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sales History - Inventa™</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f4f4f4;
-    }
-
-    .navbar {
-      background-color: #003366;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      color: white;
-    }
-
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      margin: 8px 12px;
-      font-weight: bold;
-    }
-
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-
-    .nav-toggle span {
-      background: white;
-      height: 3px;
-      margin: 4px 0;
-      width: 25px;
-    }
-
-    .nav-mobile {
-      display: none;
-      flex-direction: column;
-      background: #003366;
-      padding: 10px;
-    }
-
-    .nav-mobile a {
-      margin: 10px 0;
-    }
-
-    @media (max-width: 600px) {
-      .nav-links {
-        display: none;
-      }
-
-      .nav-toggle {
-        display: flex;
-      }
-
-      .nav-mobile.show {
-        display: flex;
-      }
-    }
-
     .container {
       padding: 20px;
+      max-width: 1000px;
+      margin: auto;
     }
-
-    h2 {
+    h1 {
       text-align: center;
       color: #003366;
-      margin-bottom: 20px;
     }
-
+    .demo-lock {
+      background-color: #fff8dc;
+      border: 1px solid #ffd700;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 15px;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin-top: 15px;
     }
-
     th, td {
-      padding: 12px 15px;
-      border-bottom: 1px solid #eee;
+      border: 1px solid #ccc;
+      padding: 10px;
       text-align: left;
+      font-size: 14px;
     }
-
     th {
-      background: #003366;
+      background-color: #003366;
       color: white;
     }
-
-    tr:hover {
-      background: #f1f1f1;
-    }
-
-    a.download-link {
-      color: #003366;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    footer {
+    .footer {
       text-align: center;
-      padding: 15px;
-      background: #eee;
-      font-size: 0.9em;
-      color: #555;
       margin-top: 30px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      th {
+        position: absolute;
+        left: -9999px;
+      }
+      td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        margin-bottom: 10px;
+      }
+      td:before {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        font-weight: bold;
+      }
+      td:nth-of-type(1):before { content: "Customer"; }
+      td:nth-of-type(2):before { content: "Total"; }
+      td:nth-of-type(3):before { content: "VAT"; }
+      td:nth-of-type(4):before { content: "Grand Total"; }
+      td:nth-of-type(5):before { content: "Date"; }
     }
   </style>
 </head>
 <body>
+  {% include 'navbar.html' %}
 
-<div class="navbar">
-  <div><strong>Inventa™</strong></div>
-  <div class="nav-toggle" onclick="toggleNav()">
-    <span></span><span></span><span></span>
+  <div class="container">
+    <h1>Inventa™ Sales History</h1>
+
+    <div class="demo-lock">
+      Demo Mode: Data entry and exports are disabled.<br>
+      To get a working version of Inventa™, contact us at:<br>
+      📞 +254 740 33 72 72 / +254 718 52 44 70<br>
+      ✉️ kwetudist@gmail.com
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Total</th>
+          <th>VAT</th>
+          <th>Grand Total</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sale in sales %}
+        <tr>
+          <td>{{ sale['customer'] }}</td>
+          <td>{{ '%.2f' % sale['total_amount'] }}</td>
+          <td>{{ '%.2f' % sale['vat'] }}</td>
+          <td>{{ '%.2f' % sale['grand_total'] }}</td>
+          <td>{{ sale['date'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="footer">Powered by Kwetu Partners Ltd</div>
   </div>
-  <div class="nav-links">
-    <a href="/{{ tenant }}/dashboard">Dashboard</a>
-    <a href="/{{ tenant }}/add-stock">Add Stock</a>
-    <a href="/{{ tenant }}/products">View Products</a>
-    <a href="/{{ tenant }}/record-sale">Record Sale</a>
-    <a href="/{{ tenant }}/sales-history">Sales History</a>
-  </div>
-</div>
-
-<div id="mobileNav" class="nav-mobile">
-  <a href="/{{ tenant }}/dashboard">Dashboard</a>
-  <a href="/{{ tenant }}/add-stock">Add Stock</a>
-  <a href="/{{ tenant }}/products">View Products</a>
-  <a href="/{{ tenant }}/record-sale">Record Sale</a>
-  <a href="/{{ tenant }}/sales-history">Sales History</a>
-</div>
-
-<div class="container">
-  <h2>Sales History</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Customer</th>
-        <th>Total (KES)</th>
-        <th>VAT (KES)</th>
-        <th>Grand Total (KES)</th>
-        <th>Invoice</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for sale in sales %}
-      <tr>
-        <td>{{ sale['date'] }}</td>
-        <td>{{ sale['customer'] }}</td>
-        <td>{{ '{:,.2f}'.format(sale['total_amount']) }}</td>
-        <td>{{ '{:,.2f}'.format(sale['vat']) }}</td>
-        <td>{{ '{:,.2f}'.format(sale['grand_total']) }}</td>
-        <td><a class="download-link" href="{{ url_for('download_invoice', tenant=tenant, sale_id=sale['id']) }}">Download</a></td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-
-<footer>
-  Powered by Kwetu Partners Ltd
-</footer>
-
-<script>
-  function toggleNav() {
-    document.getElementById('mobileNav').classList.toggle('show');
-  }
-</script>
-
 </body>
 </html>
-
-
